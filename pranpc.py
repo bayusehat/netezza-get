@@ -5,8 +5,7 @@ from psycopg2 import Error
 import telegram
 import time
 from datetime import datetime, timedelta
-ystrday = (datetime.now() - timedelta(1)).strftime('%Y%m%d')
-now = (datetime.now()).strftime('%Y%m%d')
+curmonth = (datetime.now()).strftime('%Y%m')
 # import ctypes
 start_time = time.time()
 # Netezza Get
@@ -25,7 +24,7 @@ conn = jaydebeapi.connect(jdbc_driver_name, connection_string, {'user': user, 'p
                           jars=jdbc_driver_loc)
 
 # Run SQL Netezza
-sql_str = """SELECT nper, nd, is_paid FROM telkombda..CHURN_SYMPTOM_GROUP_NPC WHERE nper = '202212' AND is_paid = 1 AND to_char(BAYAR1, 'YYYYMMDD') IN ('{}', '{}')""".format(ystrday,now)
+sql_str = """SELECT nper, nd, is_paid FROM telkombda..CHURN_SYMPTOM_GROUP_NPC WHERE nper = '202212' AND is_paid = 1 AND to_char(BAYAR1, 'YYYYMMDD') = '{}'""".format(curmonth)
 curs = conn.cursor()
 curs.execute(sql_str)
 result = curs.fetchall()
